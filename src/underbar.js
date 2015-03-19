@@ -31,6 +31,7 @@
 
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
+  
   _.first = function(array, n) {
     return n === undefined ? array[0] : array.slice(0, n);
   };
@@ -220,6 +221,37 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    if (iterator == undefined) {
+      return _.reduce(collection, function(isTrue, item) {
+        if (isTrue) {
+          if (item) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
+        else {
+          return false;
+        }
+
+      }, true);
+    }
+    else {
+      return _.reduce(collection, function(isTrue, item) {
+        if (isTrue)  {
+          if (iterator(item)) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
+        else {
+          return false;
+        }
+      }, true);
+    }
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
