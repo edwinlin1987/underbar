@@ -412,7 +412,19 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
+  _.shuffle = function(array) { // is it supposed to avoid submitting a list if it's the same order as the previous one?
+    var list = [];
+    var i;
+    var check = [];
+    var key = Math.floor(Math.random()*array.length);
+    for (i=0; i < array.length; i++) {
+      while (_.indexOf(check, key) !== -1) {
+        key = Math.floor(Math.random()*array.length);
+      }
+      list.push(array[key]);
+      check.push(key);
+    }
+    return list;
   };
 
 
@@ -427,6 +439,7 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -449,6 +462,20 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    result = [];
+    var i;
+    var j;
+    debugger;
+    for (i = 0; i < nestedArray.length; i++) {
+      if (Array.isArray(nestedArray[i])) {
+        result.push(_.flatten(nestedArray[i], result));
+      }
+      else {
+        result.push(nestedArray[i]);
+      }
+    }
+    return result;
+
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
