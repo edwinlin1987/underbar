@@ -258,6 +258,26 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (iterator == undefined) {
+      return !(_.every(collection, function(item) {
+      if (!item) {
+        return true;
+      }
+      else {
+        return false;
+      } 
+    }));
+    }
+    else {
+      return !(_.every(collection, function(item) {
+        if (!(iterator(item))) {
+          return true;
+        }
+        else {
+          return false;
+        } 
+      }));
+    }
   };
 
 
@@ -280,11 +300,33 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var i;
+    var key;
+    for (i = 1; i < arguments.length; i++) {
+      for (key in arguments[i]) {
+        arguments[0][key] = arguments[i][key];
+      }
+    }
+
+
+    return arguments[0];
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var i;
+    var key;
+    for (i = 1; i < arguments.length; i++) {
+      for (key in arguments[i]) {
+        if (arguments[0][key] == undefined) {
+          arguments[0][key] = arguments[i][key];
+        }
+      }
+    }
+
+
+    return arguments[0];
   };
 
 
@@ -328,6 +370,19 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var list = {};
+    var key;
+
+    return function() {
+      key = arguments[0];
+      if (list[key] == undefined) {
+        list[key] = func.apply(this,arguments);
+        return list[key];
+      }
+      else {
+        return list[key];
+      }
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -337,6 +392,13 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments);
+    args = args.slice(2, args.length);
+    return setTimeout(function() {      // don't quite understand why this function is necessary but the test fails if i plug in func directly
+      return func.apply(this,args); 
+    }, wait);
+
+
   };
 
 
